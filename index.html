@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sudoku</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="events.js"></script>
+    <script type="text/javascript" src="util.js"></script>
+    <script type="text/javascript" src="mainScript.js"></script>
+    <script type="text/javascript" src="generator.js"></script>
+</head>
+<body>
+
+    <div style="position: absolute;">
+        <p>
+            <input type="button" onclick="sudoku_table.save()" value="Зберегти"/>
+            <input type="button" onclick="sudoku_table.load()" value="Завантажити"/>
+            <select id="save_slot">
+                <option disabled>Слот збереження</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+            </select>
+        </p>
+        <input type="button" onclick="sudoku_table.endWrite()" value="Завершити введення"/>
+        <input type="button" onclick="sudoku_table.solve()" value="Спробувати вирішити"/>
+    </div>
+
+
+    <div style="padding-top: 70px" id="table-container"></div>
+
+    <script>
+        generate_sudoku_table("table-container", "sudoku-field", "sudoku");
+
+        sudoku_table = new Sudoku_table("sudoku");
+    </script>
+</body>
+</html>
