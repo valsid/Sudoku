@@ -22,8 +22,6 @@ function generate_sudoku_table(containerBlockId, tableClass, tableId) {
 
             addEvent(td, "keypress", keyPressed);
             addEvent(td, "keydown", keyDown);
-            //td.addEventListener("keypress", keyPressed, false);
-            //td.addEventListener("keydown", keyDown, false);
 
             td.appendChild(document.createTextNode(""));
             tr.appendChild(td);
@@ -31,7 +29,10 @@ function generate_sudoku_table(containerBlockId, tableClass, tableId) {
         tbody.appendChild(tr);
     }
     table.appendChild(tbody);
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
     container.appendChild(table);
 
     return table;
-}
+} 

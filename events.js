@@ -1,4 +1,4 @@
-
+ 
 function addEvent(element, eventName, callback) {
     if (element.addEventListener) {
         element.addEventListener(eventName, callback, false);

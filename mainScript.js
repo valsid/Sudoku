@@ -1,5 +1,5 @@
 var sudoku_table = null;
-
+ 
 // TODO: save/load to/from string
 //       save last save/load slot
 //       select font

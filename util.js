@@ -1,7 +1,7 @@
 function randInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
+ 
 function getRandBlock() {
     var array = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     var swapCount = randInteger(20, 50);
