@@ -1,6 +1,6 @@
 # Sudoku
 
-This is a web [Sudoku](https://en.wikipedia.org/wiki/Sudoku) creation and solving tool. 
+This application is a web [Sudoku](https://en.wikipedia.org/wiki/Sudoku) creation and solving tool. 
 It allows user to fill Sudoku with initial numbers. Than the user may ask a program to solve the Sudoku. 
 After that the program outputs the solution of sudoku or notifies user that there are no possible solutions for this Sudoku.
 
