@@ -29,8 +29,22 @@
         <option value="8">8</option>
       </select>
     </p>
-    <input type="button" onclick="sudoku_table.endWrite()" value="Завершити введення" />
-    <input type="button" onclick="sudoku_table.solve()" value="Спробувати вирішити" />
+    <p>
+      <input type="button" onclick="sudoku_table.endWrite()" value="Завершити введення" />
+      <input type="button" onclick="sudoku_table.solve()" value="Спробувати вирішити" />
+    </p>
+    <p>
+      <input type="button" onclick="sudokuGame.startNewGame(document.getElementById('difficulty').value)" value="Почати нову гру" />
+      <select id="difficulty">
+          <option disabled>Рівень складності</option>
+          <option value="easy">Легкий</option>
+          <option value="medium">Середній</option>
+<!--          <option value="hard">Складний</option> -->
+        </select>  
+    </p>
+    <p>
+        <input type="button" onclick="sudokuGame.reset()" value="Перезапуск рівня" />
+    </p>
   </div>
 
   <div style="padding-top: 70px" id="table-container"></div>
@@ -39,6 +53,7 @@
     generate_sudoku_table("table-container", "sudoku-field", "sudoku");
 
     sudoku_table = new Sudoku_table("sudoku");
+    sudokuGame = new SudokuGame(sudoku_table);
   </script>
 </body>
 
