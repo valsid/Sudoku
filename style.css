@@ -10,7 +10,7 @@ body {
   /*width: 540px;*/
   text-align: center;
   font-size: 1.4em;
-  font-family: "Tele-Marines", "Wingdings", Helvetica, Arial, sans-serif;
+  font-family: "Tele-Marines",  Helvetica, Arial, sans-serif;
   border-top: solid;
 }
 
@@ -31,4 +31,33 @@ td:nth-child(3n) {
 
 tr:nth-child(3n) td {
   border-bottom: solid;
+}
+
+#game-menu {
+  position: absolute;
+  margin-left: 1em;
+}
+
+.aside-menu {
+  display: flex;
+  flex-direction:column;
+}
+
+.aside-menu * {
+  width: 250px;
+  height: 2.5em;
+  margin: 0.5em 0;
+}
+
+.menu {
+  margin-top: 10em;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+}
+
+.menu * {
+  width: 350px;
+  height: 2.5em;
+  margin: 0.5em 0;
 }

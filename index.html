@@ -13,60 +13,59 @@
 
 <body>
 
-  <div style="position: absolute;">
-    <p>
-      <input type="button" onclick="sudoku_table.save()" value="Зберегти" />
-      <input type="button" onclick="sudoku_table.load()" value="Завантажити" />
-      <select id="save_slot">
-        <option disabled>Слот збереження</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-      </select>
-    </p>
-    <p>
-      <input type="button" onclick="sudoku_table.endWrite()" value="Завершити введення" />
-      <input type="button" onclick="sudoku_table.solve()" value="Спробувати вирішити" />
-    </p>
-    <p>
-      <input type="button" onclick="sudokuGame.startNewGame(document.getElementById('difficulty').value)" value="Почати нову гру" />
-      <select id="difficulty">
-          <option disabled>Рівень складності</option>
-          <option value="easy">Легкий</option>
-          <option value="medium">Середній</option>
-<!--          <option value="hard">Складний</option> -->
-        </select>  
-    </p>
-    <p>
-        <input type="button" onclick="sudokuGame.reset()" value="Перезапуск рівня" />
-    </p>
+  <div id="game-menu" hidden="true">
+    <div class="aside-menu">
+        <input type="button" onclick="sudoku_table.save()" value="Зберегти" />
+        <!-- <input type="button" onclick="sudoku_table.endWrite()" value="Завершити введення" /> -->
+        <!-- <input type="button" onclick="sudokuGame.hint()" value="Знайти наступне значчення" /> -->
+        <input type="button" onclick="sudoku_table.solve()" value="Спробувати вирішити" />
+        <input type="button" onclick="sudokuGame.reset()" id="reset-button" value="Перезапуск рівня" />
+        <input type="button" onclick="sudokuGame.backToMenu()" value="Головне меню" />
+    </div>
   </div>
 
-  <div style="padding-top: 70px" id="table-container"></div>
+  <div id="main-menu">
+    <div class="menu">
+      <input type="button" onclick="sudokuGame.continue()" id="continue-button" hidden="true" value="Продовжити"/>
+      <input type="button" onclick="sudokuGame.startNewGame(document.getElementById('difficulty').value)" value="Нова гра" />
+      <select id="difficulty">
+          <!-- <option disabled>Рівень складності</option> -->
+          <option value="easy">Легкий рівень складності</option>
+          <option value="medium">Середній рівень складності</option>
+  <!--        <option value="hard">Складний</option> -->
+      </select>  
+      <input type="button" onclick="sudokuGame.loadSave()" value="Завантажити" />
+      <select id="save_slot">
+        <!-- <option disabled>Слот збереження</option> -->
+        <option value="1">Слот збереження 1</option>    <!-- TODO: if available -->
+        <option value="2">Слот збереження 2</option>
+        <option value="3">Слот збереження 3</option>
+        <option value="4">Слот збереження 4</option>
+      </select>
+      <input type="button" onclick="" value="Досягнення" />
+      
+      <div class="pluso" data-background="transparent" data-options="big,square,line,horizontal,nocounter,theme=06" data-services="vkontakte,odnoklassniki,facebook,twitter,google" data-title="Судоку" data-description="Грайте в судоку онлайн"></div>    
+    </div>
+  </div>
+  <div style="padding-top: 70px" id="table-container" hidden="true"></div>
 
   <script>
     generate_sudoku_table("table-container", "sudoku-field", "sudoku");
 
     sudoku_table = new Sudoku_table("sudoku");
     sudokuGame = new SudokuGame(sudoku_table);
-  </script>
- <script type="text/javascript">(function() {
-  if (window.pluso)if (typeof window.pluso.start == "function") return;
-  if (window.ifpluso==undefined) { window.ifpluso = 1;
-    var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
-    s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
-    s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
-    var h=d[g]('body')[0];
-    h.appendChild(s);
-  }})();</script> 
-  
-<div class="pluso" data-background="transparent" data-options="big,square,line,horizontal,nocounter,theme=06" data-services="vkontakte,odnoklassniki,facebook,twitter,google" data-title="Судоку" data-description="Грайте в судоку онлайн"></div>
-
+    sudokuGame.updateContinueButton();
+    
+    (function() {
+    if (window.pluso)if (typeof window.pluso.start == "function") return;
+    if (window.ifpluso==undefined) { window.ifpluso = 1;
+      var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+      s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
+      s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
+      var h=d[g]('body')[0];
+      h.appendChild(s);
+    }})();
+  </script> 
 </body>
 
 </html>

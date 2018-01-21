@@ -45,13 +45,26 @@ function Sudoku_table(tableId) {
     }
   };
 
+  // TODO: name converting options
   this.save = function () {
     var saveSlotId = document.getElementById("save_slot").value.toString();
-    localStorage["b_table" + saveSlotId] = JSON.stringify(this.basicTable.table.table);
-    localStorage["inactive_table" + saveSlotId] = JSON.stringify(this.enabledCells);
+    this.saveTo(saveSlotId);
+  };
+
+  this.saveTo = function (slotName) {
+    localStorage["b_table" + slotName] = JSON.stringify(this.basicTable.table.table);
+    localStorage["inactive_table" + slotName] = JSON.stringify(this.enabledCells);
+  };
+
+  this.loadFrom = function (slotName) {
+    let propName = "b_table" + slotName;
+    if(localStorage[propName] != undefined) {
+      this.loadField(JSON.parse(localStorage[propName]), JSON.parse(localStorage["inactive_table" + slotName]));
+    }
   };
 
   this.load = function () {
+    // TODO: localStorage security
     var saveSlotId = document.getElementById("save_slot").value.toString();
     if (localStorage["b_table" + saveSlotId] == undefined ||
       localStorage["inactive_table" + saveSlotId] == undefined) {
@@ -59,17 +72,17 @@ function Sudoku_table(tableId) {
       return;
     }
 
-    this.basicTable.table.table = JSON.parse(localStorage["b_table" + saveSlotId]);
-    this.enabledCells = JSON.parse(localStorage["inactive_table" + saveSlotId]);
-    this.writeDataToSudokuTable(this.basicTable.table.table, this.enabledCells);
-    this.isSolve = false;
+    this.loadField(JSON.parse(localStorage["b_table" + saveSlotId]), JSON.parse(localStorage["inactive_table" + saveSlotId]));
   };
 
-  this.loadField = function(data) {
+  this.loadField = function(data, blockedCells) {
+    // TODO: update colors
     this.basicTable.table.table = data.slice(0);
-    this.enabledCells = data.map(v => v == 0 ? true : false);
+    this.enabledCells = blockedCells != undefined ? blockedCells : data.map(v => v == 0 ? true : false);
     this.writeDataToSudokuTable(this.basicTable.table.table, this.enabledCells);
     this.isSolve = false;
+
+    this.updateColors();
   };
 
   this.getHtmlElementsByValue = function (sudokuValuesArray, value) {
@@ -136,6 +149,12 @@ function Sudoku_table(tableId) {
 
     return true;
   };
+
+  this.updateColors = function (value) {
+    for(let i = 1; i <= 9; i++) {
+      this.updateColorsFor(i);
+    }
+  }
 
   this.updateColorsFor = function (value) {
     var self = this;
@@ -601,6 +620,7 @@ class SudokuGame {
   constructor(tableObj) {
 //    this.table = new Sudoku_table(tableId);
     this.table = tableObj;
+    // this.currentLevelSeed 
     this.currentDifficultty = 'easy';
     this.currentLevel = -1;
     
@@ -620,12 +640,51 @@ class SudokuGame {
     } else {
 
     }
+
+    this.showTable();
   }
 
   reset() {
     if(this.currentLevel != -1) {
       this.table.loadField(levels[this.currentDifficultty][this.currentLevel]);
     }
+  }
+
+  showMenu() {
+    this.updateContinueButton();
+    document.getElementById("main-menu").hidden = false;
+    document.getElementById("table-container").hidden = true;
+    document.getElementById("game-menu").hidden = true;
+  }
+
+  showTable() {
+    document.getElementById("reset-button").disabled = this.currentLevel == -1;
+    document.getElementById("main-menu").hidden = true;
+    document.getElementById("table-container").hidden = false;
+    document.getElementById("game-menu").hidden = false;
+  }
+
+  continue() {
+    if(localStorage["b_tablecurrent-save"] != undefined) {
+      this.table.loadFrom("current-save");
+      this.showTable();
+    }
+    this.currentLevel = -1;
+  }
+
+  updateContinueButton() {
+    document.getElementById("continue-button").hidden = (localStorage["b_tablecurrent-save"] == undefined);
+  }
+
+  loadSave() {
+    this.currentLevel = -1;
+    this.table.load();
+    this.showTable();
+  }
+
+  backToMenu() {
+    this.table.saveTo("current-save");
+    this.showMenu();
   }
 
   addAchievementEventListener(listener) {
