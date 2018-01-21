@@ -13,6 +13,8 @@
    try {
      if (keyCode >= (48 + 1) && keyCode <= 58) {
        sudoku_table.updateCell(event.target, keyCode - 48);
+
+       sudokuGame.checkSolved();
      }
    } finally {
      if (event.preventDefault) {

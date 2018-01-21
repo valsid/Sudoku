@@ -625,10 +625,6 @@ class SudokuGame {
     this.currentLevel = -1;
     
     this.achievementListeners = [];
-
-    if(localStorage["achievements"] == undefined) {
-      localStorage["achievements"] = {'easySolved': false, 'mediumSolved': false};
-    }
   }
 
   startNewGame(difficultty) { // 'easy', 'medium', 'hard'
@@ -692,13 +688,23 @@ class SudokuGame {
   }
 
   achievementButton() {
-    let data = localStorage["achievements"];
-    if(data != undefined) {
-      alert("Досягнення:\n\tВирішено просте судоку: " + (data.easySolved ? "Отримано" : "Не отримано")
-        + "\n\tВирішено судоку середнього рівня складності: " + (data.mediumSolved ? "Отримано" : "Не отримано")
-        + "\n\tВирішено не складне судоку: " + (data.easySolved ? "Отримано" : "Не отримано") // :D
+    let data = localStorage["achievements-easySolved"];
+    let getProp = propName => (localStorage[propName] == undefined || localStorage[propName] === false ? "Не отримано" : "Отримано" );
+    if (data != undefined) {
+      alert("Досягнення:\n\tВирішено судоку: " + getProp("achievements-easySolved")
+        // + "\n\tВирішено судоку середнього рівня складності: " + (data.mediumSolved ? "Отримано" : "Не отримано")
+        + "\n\tВирішено не складне судоку: " + getProp("achievements-easySolved") // :D
         + "\n\tКількість вирішених судоку:" + (localStorage["solvedCount"] != undefined ? localStorage["solvedCount"] : 0)
       ); 
+    }
+  }
+
+  checkSolved() {
+    let index = this.table.basicTable.table.table.indexOf(0);
+    if (index === -1 && this.table.isValidAll()) {
+      localStorage["achievements-easySolved"] = true;
+      localStorage["solvedCount"] = (localStorage["solvedCount"] == undefined ? 0 : Number.parseInt(localStorage["solvedCount"]) + 1);
+      alert("Отримано досягнення: Вирішити судоку");
     }
   }
 }
