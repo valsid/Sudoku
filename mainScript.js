@@ -625,6 +625,10 @@ class SudokuGame {
     this.currentLevel = -1;
     
     this.achievementListeners = [];
+
+    if(localStorage["achievements"] == undefined) {
+      localStorage["achievements"] = {'easySolved': false, 'mediumSolved': false};
+    }
   }
 
   startNewGame(difficultty) { // 'easy', 'medium', 'hard'
@@ -687,7 +691,14 @@ class SudokuGame {
     this.showMenu();
   }
 
-  addAchievementEventListener(listener) {
-    
+  achievementButton() {
+    let data = localStorage["achievements"];
+    if(data != undefined) {
+      alert("Досягнення:\n\tВирішено просте судоку: " + (data.easySolved ? "Отримано" : "Не отримано")
+        + "\n\tВирішено судоку середнього рівня складності: " + (data.mediumSolved ? "Отримано" : "Не отримано")
+        + "\n\tВирішено не складне судоку: " + (data.easySolved ? "Отримано" : "Не отримано") // :D
+        + "\n\tКількість вирішених судоку:" + (localStorage["solvedCount"] != undefined ? localStorage["solvedCount"] : 0)
+      ); 
+    }
   }
 }
