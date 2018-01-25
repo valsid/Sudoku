@@ -661,61 +661,25 @@ function SudokuFieldSolveSet(tableContainer) {
   };
 }
 
-let levels = {
-  'easy': [
-    [0,0,0,0,0,0,0,0,0,5,8,0,0,0,7,0,4,0,1,0,6,2,0,4,8,0,0,3,0,0,0,0,2,6,7,5,0,0,5,3,0,9,1,0,0,2,1,8,6,0,0,0,0,4,0,0,7,8,0,1,2,0,3,0,9,0,4,0,0,0,8,7,0,0,0,0,0,0,0,0,0],
-    [0,7,2,0,0,3,9,0,0,4,3,0,0,0,0,0,0,0,0,9,0,4,7,0,0,0,0,0,0,5,0,2,0,0,0,0,0,0,3,8,4,9,7,0,0,0,0,0,0,6,0,4,0,0,0,0,0,0,3,2,0,4,0,0,0,0,0,0,0,0,9,2,0,0,6,1,0,0,5,7,0],
-    [2,0,0,0,0,0,0,0,0,7,0,0,0,5,9,0,6,8,0,5,0,0,0,8,1,0,0,9,2,0,4,0,0,0,0,0,0,0,5,0,8,0,7,0,0,0,0,0,0,0,7,0,2,6,0,0,4,6,0,0,0,7,0,3,6,0,7,9,0,0,0,1,0,0,0,0,0,0,0,0,5],
-    [0,4,0,0,0,1,0,0,9,0,0,0,0,0,0,0,5,4,5,0,9,4,0,0,0,0,2,1,0,2,0,7,0,0,0,0,0,0,0,8,0,3,0,0,0,0,0,0,0,4,0,2,0,7,2,0,0,0,0,6,8,0,3,3,6,0,0,0,0,0,0,0,8,0,0,5,0,0,0,6,0],
-    [0,2,0,0,5,6,0,0,0,0,0,0,0,0,9,0,1,8,5,0,0,0,0,0,2,0,0,0,0,0,7,8,0,0,5,9,0,0,5,0,0,0,8,0,0,2,7,0,0,4,5,0,0,0,0,0,6,0,0,0,0,0,4,4,3,0,6,0,0,0,0,0,0,0,0,5,7,0,0,9,0],
-    [0,8,4,5,0,0,0,0,0,0,0,1,0,0,2,6,5,0,0,0,0,0,6,0,0,9,0,0,0,0,0,0,0,5,6,7,0,6,0,4,0,1,0,3,0,2,3,5,0,0,0,0,0,0,0,5,0,0,8,0,0,0,0,0,1,7,9,0,0,3,0,0,0,0,0,0,0,7,4,2,0],
-    [2,0,0,0,0,0,0,0,7,0,9,7,0,0,0,0,4,1,8,0,0,0,9,6,0,2,0,0,0,5,0,0,9,4,1,0,0,0,0,3,1,7,0,0,0,0,2,9,4,0,0,7,0,0,0,1,0,2,7,0,0,0,4,9,7,0,0,0,0,8,3,0,5,0,0,0,0,0,0,0,2],
-    [1,7,0,0,4,0,0,3,0,0,0,6,7,0,0,0,0,0,0,0,5,0,0,8,0,0,6,2,9,4,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,1,9,4,4,0,0,9,0,0,8,0,0,0,0,0,0,0,5,2,0,0,0,2,0,0,6,0,0,7,5],
-    [0,5,8,0,4,0,0,3,0,0,0,0,0,8,7,2,0,5,3,0,0,0,0,0,0,8,7,0,0,9,0,0,6,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,4,0,0,7,0,0,2,1,0,0,0,0,0,0,3,8,0,3,2,1,0,0,0,0,0,4,0,0,5,0,9,2,0],
-    [2,0,0,5,0,0,3,0,0,0,5,0,8,7,0,0,0,0,0,0,0,0,0,6,0,0,0,9,3,0,6,8,0,4,2,0,4,0,0,0,0,0,0,0,9,0,2,5,0,3,4,0,1,8,0,0,0,3,0,0,0,0,0,0,0,0,0,1,2,0,9,0,0,0,7,0,0,5,0,0,2],
-  ],
-  'medium': [
-    [1,0,0,0,0,0,0,7,0,5,7,4,1,0,0,0,0,0,0,0,8,0,0,5,4,0,0,7,0,0,0,3,0,1,0,0,9,4,0,5,0,2,0,3,7,0,0,6,0,1,0,0,0,2,0,0,3,8,0,0,7,0,0,0,0,0,0,0,9,3,6,1,0,5,0,0,0,0,0,0,8],
-    [1,0,0,3,0,0,0,7,0,0,0,0,0,0,0,0,0,0,5,0,0,0,7,0,3,8,9,0,1,2,0,0,4,0,0,0,8,6,0,0,5,0,0,2,4,0,0,0,8,0,0,7,3,0,4,8,5,0,2,0,0,0,7,0,0,0,0,0,0,0,0,0,0,2,0,0,0,9,0,0,5],
-    [0,6,8,1,2,0,0,0,0,0,0,7,0,0,4,0,0,0,9,0,0,8,0,0,0,0,0,0,7,0,0,0,3,2,0,0,4,0,3,0,8,0,1,0,5,0,0,6,4,0,0,0,8,0,0,0,0,0,0,9,0,0,1,0,0,0,3,0,0,4,0,0,0,0,0,0,6,1,9,2,0],
-    [1,0,2,0,0,0,0,0,0,0,0,0,0,8,0,2,0,0,0,4,3,5,0,0,1,0,0,0,0,0,3,5,0,0,0,4,0,7,5,2,0,8,6,9,0,8,0,0,0,6,4,0,0,0,0,0,4,0,0,5,9,8,0,0,0,1,0,7,0,0,0,0,0,0,0,0,0,0,3,0,1],
-    [0,8,0,4,0,9,0,3,0,0,3,2,0,0,0,0,8,0,6,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,6,3,0,0,6,7,5,8,1,0,0,9,7,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,4,0,5,0,0,0,0,6,7,0,0,1,0,6,0,4,0,5,0],
-  ],
-  'hard': [
-  ],
-}
-
 class SudokuGame {
   constructor(tableObj) {
 //    this.table = new Sudoku_table(tableId);
     this.table = tableObj;
     // this.currentLevelSeed 
-    this.currentDifficultty = 'easy';
-    this.currentLevel = -1;
+    this.currentDifficulty = 'easy';
+    this.currentLevel = undefined;
     
     this.achievementListeners = [];
   }
 
-  startNewGame(difficultty) { // 'easy', 'medium', 'hard'
-    let dLevels = levels[difficultty];
-    if(dLevels != undefined && dLevels.length != 0) {
-      this.currentDifficultty = difficultty;
-      let newLevel;
-      do {
-        newLevel = randInteger(0, dLevels.length - 1);
-      } while(newLevel == this.currentLevel);
-      this.currentLevel = newLevel;
-      this.table.loadField(dLevels[this.currentLevel]);
-    } else {
-
-    }
-
+  startNewGame(difficulty) { // 'easy', 'medium', 'hard'
+    this.currentLevel = this.generate(difficulty);
     this.showTable();
   }
 
   reset() {
-    if(this.currentLevel != -1) {
-      this.table.loadField(levels[this.currentDifficultty][this.currentLevel]);
+    if(this.currentLevel != undefined) {
+      this.table.loadField(this.currentLevel);
     }
   }
 
@@ -772,13 +736,15 @@ class SudokuGame {
   checkSolved() {
     let index = this.table.basicTable.table.table.indexOf(0);
     if (index === -1 && this.table.isValidAll()) {
+      if (localStorage["achievements-easySolved"] !== true) {
+        alert("Отримано досягнення: Вирішити судоку");
+      }
       localStorage["achievements-easySolved"] = true;
-      localStorage["solvedCount"] = (localStorage["solvedCount"] == undefined ? 0 : Number.parseInt(localStorage["solvedCount"]) + 1);
-      alert("Отримано досягнення: Вирішити судоку");
+      localStorage["solvedCount"] = (localStorage["solvedCount"] == undefined ? 1 : Number.parseInt(localStorage["solvedCount"]) + 1);
     }
   }
 
-  generate() {
+  generate(difficulty) { // 'easy', 'medium', 'hard'
     function randPair() {
       let r = () => randInteger(0, 2);
       let segment = r() * 3;
@@ -822,5 +788,66 @@ class SudokuGame {
     // purification:
 
     this.table.loadField(basicField.table);
+
+    let cellsOnFinalField;
+    switch(difficulty) {
+      case 'easy':
+        cellsOnFinalField = 4 * 9 + randInteger(-2, 2);
+        break;
+      case 'medium':
+        cellsOnFinalField = 4 * 9 - 4 + randInteger(-2, 2);
+        break;
+      case 'hard':
+        cellsOnFinalField = 3 * 9 + randInteger(-2, 2);
+        break;
+      default:
+        if(Number.isInteger(difficulty) && difficulty > 16 && difficulty < 9 * 9) {  // bigger value easiest
+          cellsOnFinalField = difficulty;
+        } else {
+          cellsOnFinalField = 4*9;
+        }
+    }
+    let cellsToRemove = 81 - cellsOnFinalField;
+
+
+    let visited = {};
+    visited[cellsToRemove] = new Set();
+    let deletedCellsStack = [];
+    while (cellsToRemove != 0) {
+      if(visited[cellsToRemove] === undefined) {
+        visited[cellsToRemove] = new Set(visited[cellsToRemove + 1]);
+      }
+      if(visited[cellsToRemove].size == 81) {
+        console.log(cellsToRemove, 'roll back');
+        visited[cellsToRemove].clear();
+        visited[cellsToRemove] = undefined;
+        cellsToRemove++;
+        continue;
+      }
+      // clear random cell
+      // TODO: inverse rand method, when visited set more than half full
+      console.log(cellsToRemove, visited[cellsToRemove].size);
+      let randomCell;
+      do {
+        randomCell = randInteger(0, basicField.table.length - 1);
+      } while(visited[cellsToRemove].has(randomCell) /*|| basicField.atAbs(randomCell) == 0*/);
+      visited[cellsToRemove].add(randomCell);
+      deletedCellsStack.push( {cell: randomCell, value: basicField.atAbs(randomCell)} );
+      basicField.writeAbs(randomCell, 0);
+
+      // check solution
+      this.table.loadField(basicField.table);
+      if(solveSudoku(this.table.basicTable)) {
+        cellsToRemove--;
+      } else {
+        console.log(cellsToRemove, 'wrong cell');
+        let val = deletedCellsStack.pop();
+        basicField.writeAbs(val.cell, val.value);
+      }
+    }
+
+    this.table.loadField(basicField.table);    
+
+    return basicField.table;
   }
 }
