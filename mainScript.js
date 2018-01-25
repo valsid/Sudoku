@@ -57,9 +57,11 @@ function Sudoku_table(tableId) {
   };
 
   this.loadFrom = function (slotName) {
-    let propName = "b_table" + slotName;
+    let propName = 'b_table' + slotName;
     if(localStorage[propName] != undefined) {
-      this.loadField(JSON.parse(localStorage[propName]), JSON.parse(localStorage["inactive_table" + slotName]));
+      let data = JSON.parse(localStorage[propName]);
+      let inactive = JSON.parse(localStorage['inactive_table' + slotName]);
+      return this.loadField(data, inactive);
     }
   };
 
@@ -68,11 +70,10 @@ function Sudoku_table(tableId) {
     var saveSlotId = document.getElementById("save_slot").value.toString();
     if (localStorage["b_table" + saveSlotId] == undefined ||
       localStorage["inactive_table" + saveSlotId] == undefined) {
-      alert("Збереження не знайдено");
-      return;
+      return undefined;
     }
 
-    this.loadField(JSON.parse(localStorage["b_table" + saveSlotId]), JSON.parse(localStorage["inactive_table" + saveSlotId]));
+    return this.loadField(JSON.parse(localStorage["b_table" + saveSlotId]), JSON.parse(localStorage["inactive_table" + saveSlotId]));
   };
 
   this.loadField = function(data, blockedCells) {
@@ -83,6 +84,8 @@ function Sudoku_table(tableId) {
     this.isSolve = false;
 
     this.updateColors();
+
+    return {'data': data, 'inactive': blockedCells};
   };
 
   this.getHtmlElementsByValue = function (sudokuValuesArray, value) {
@@ -691,18 +694,26 @@ class SudokuGame {
   }
 
   showTable() {
-    document.getElementById("reset-button").disabled = this.currentLevel == -1;
+    document.getElementById("reset-button").disabled = this.currentLevel === undefined;
     document.getElementById("main-menu").hidden = true;
     document.getElementById("table-container").hidden = false;
     document.getElementById("game-menu").hidden = false;
   }
 
   continue() {
+    this.currentLevel = undefined;
     if(localStorage["b_tablecurrent-save"] != undefined) {
-      this.table.loadFrom("current-save");
-      this.showTable();
+      let data = this.table.loadFrom("current-save");
+      if(data) {
+        for(let i = 0; i < data.inactive.length; i++) {
+          if(data.inactive[i] === true) {
+            data.data[i] = 0;
+          }
+        }
+        this.currentLevel = data.data;
+        this.showTable();
+      }
     }
-    this.currentLevel = -1;
   }
 
   updateContinueButton() {
@@ -710,13 +721,17 @@ class SudokuGame {
   }
 
   loadSave() {
-    this.currentLevel = -1;
-    this.table.load();
-    // if()
-    this.showTable();
+    this.currentLevel = undefined;
+    let data = this.table.load()
+    if(data) {
+      this.showTable();      
+    } else {
+      alert("Збереження не знайдено");      
+    }
   }
 
   backToMenu() {
+    this.currentLevel = undefined; 
     this.table.saveTo("current-save");
     this.showMenu();
   }
