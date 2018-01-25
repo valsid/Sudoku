@@ -234,7 +234,9 @@ function Sudoku_table(tableId) {
     //    return;
     //}
 
-    solveSudoku(this.basicTable);
+    if(!solveSudoku(this.basicTable)) {
+      alert("Рішень не знайдено");      
+    }
   };
 }
 
@@ -322,6 +324,13 @@ function Sudoku_field(htmlTable, backgroundColor) {
     return this.getSegmentFromPos(row, col);
   };
 
+  this.updateView = function() {
+    for(let i = 0; i < 9 * 9; i++) {
+//      console.log(this.table.atAbs(i));
+      this.writeAbs(i, this.table.atAbs(i));
+    }
+  }
+
   this.isFull = function () {
     for (var i = 0; i < 9 * 9; i++) {
       if (this.table.atAbs(i) == 0) {
@@ -408,14 +417,12 @@ function solveSudoku(sudokuField) {
   } while (isChanged);
 
   // TODO: зробити перебір, деякі судоку не до кінця вирішуються
-  if (!sudokuField.isFull()) {
-    alert("Рішень не знайдено");
-  }
-
-  return true;
+  return sudokuField.isFull();
 }
 
 function SudokuTableContainer(sudokuArray, newArrayFillValue) {
+  // TODO: constants instead of magic numbers
+
   if (sudokuArray != undefined) {
     this.table = sudokuArray;
   } else {
@@ -468,10 +475,11 @@ function SudokuTableContainer(sudokuArray, newArrayFillValue) {
     var top = rowIndex - rowIndex % 3;
     var left = colIndex - colIndex % 3;
 
+    let k = 0;
     for (var i = top; i < top + 3; i++) {
       for (var j = left; j < left + 3; j++) {
         if (Array.isArray(value)) {
-          this.write(i, j, value[i]);
+          this.write(i, j, value[k++]);
         } else {
           this.write(i, j, value);
         }
@@ -522,6 +530,69 @@ function SudokuTableContainer(sudokuArray, newArrayFillValue) {
   this.getTableSets = function () {
     return new SudokuFieldSolveSet(this);
   };
+
+  function swap_util(i, j, getter, setter) {
+    let between = (n, min, max) => (n >= min && n <= max);
+    let validIndex = (n) => between(n, 0, 8);
+
+    if(Number.isInteger(i) && Number.isInteger(j)
+      && validIndex(i) && validIndex(j)) {
+      let iRow = getter.call(this, i);
+      let jRow = getter.call(this, j);
+      console.log(i, iRow);
+      console.log(j, jRow);
+      setter.call(this, i, jRow);
+      setter.call(this, j, iRow);
+      return true;
+    }
+    return false;
+  }
+
+  this.swapRows = function(i, j) {
+    return swap_util.call(this, i, j, this.getRow, this.writeToRow);
+  }
+
+  this.swapColumns = function(i, j) {
+    return swap_util.call(this, i, j, this.getCol, this.writeToCol);
+  }
+
+  this.transponce = function() {
+    let rows = [];
+    let columns = [];
+    for(let i = 0; i < 9; i++) {
+      rows[i] = this.getRow(i);
+      columns[i] = this.getCol(i);
+    }
+
+    for(let i = 0; i < 9; i++) {
+      this.writeToRow(i, columns[i]);
+      this.writeToCol(i, rows[i]);
+    }
+  }
+
+  this.swapRowSegments = function(i, j) {  // 0..2
+    // TODO: check
+    for(let k = 0; k < 3; k++) {
+      swap_util.call(this, i * 3 + k, j * 3 + k, this.getSegment, this.writeToSegment);
+    }
+    return true;
+  }
+
+  this.swapColumnSegments = function(i, j) {  // 0..2
+    // TODO: check
+    for(let k = 0; k < 3; k++) {
+      swap_util.call(this, i + k * 3, j + k * 3, this.getSegment, this.writeToSegment);
+    }
+    return true;
+  }
+
+  // this.rotate = function(angle) {  // '90', '180', '270'
+
+  // }
+
+  // this.flip = function(transformType) {  // 'horizontal', 'vertical'
+
+  // }
 }
 
 function SudokuFieldSolveSet(tableContainer) {
@@ -706,5 +777,9 @@ class SudokuGame {
       localStorage["solvedCount"] = (localStorage["solvedCount"] == undefined ? 0 : Number.parseInt(localStorage["solvedCount"]) + 1);
       alert("Отримано досягнення: Вирішити судоку");
     }
+  }
+
+  generate() {
+
   }
 }
