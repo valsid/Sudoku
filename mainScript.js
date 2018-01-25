@@ -539,8 +539,6 @@ function SudokuTableContainer(sudokuArray, newArrayFillValue) {
       && validIndex(i) && validIndex(j)) {
       let iRow = getter.call(this, i);
       let jRow = getter.call(this, j);
-      console.log(i, iRow);
-      console.log(j, jRow);
       setter.call(this, i, jRow);
       setter.call(this, j, iRow);
       return true;
@@ -750,6 +748,7 @@ class SudokuGame {
   loadSave() {
     this.currentLevel = -1;
     this.table.load();
+    // if()
     this.showTable();
   }
 
@@ -780,6 +779,48 @@ class SudokuGame {
   }
 
   generate() {
+    function randPair() {
+      let r = () => randInteger(0, 2);
+      let segment = r() * 3;
+      let i = r();
+      let j;
+      do {
+        j = r();
+      } while(i == j);
+      return {'i': segment + i, 'j': segment + j};
+    }
 
+    let opList = [
+      function(field) {
+        let pair = randPair();
+        field.swapRows(pair.i, pair.j);
+      },
+      function(field) {
+        let pair = randPair();
+        field.swapColumns(pair.i, pair.j);
+      },
+      field => field.swapRowSegments(randInteger(0, 2), randInteger(0, 2)),
+      field => field.swapColumnSegments(randInteger(0, 2), randInteger(0, 2)),
+      field => field.transponce(),
+    ];
+
+    // build basic field:
+    let basicField = new SudokuTableContainer();
+    let baseRow = getRandBlock();
+    let order = [0, 3, 6, 1, 4, 7, 2, 5, 8];
+    for(let i of order) {
+      basicField.writeToRow(i, baseRow);
+      baseRow.push(baseRow.shift());
+    }
+
+    // shuffle:
+    let n = randInteger(70, 100);
+    for(let i = 0; i < n; i++) {
+      opList[randInteger(0, opList.length - 1)](basicField);
+    }
+
+    // purification:
+
+    this.table.loadField(basicField.table);
   }
 }
